@@ -4,9 +4,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-
+#include <linux/types.h>
+#include <private/android_filesystem_config.h>
+#include <stdbool.h>
+#include <string.h>
 #include "binder.h"
 #include "test_server.h"
+
 
 uint32_t svcmgr_lookup(struct binder_state *bs, uint32_t target, const char *name)
 {
@@ -114,7 +118,7 @@ int hello_service_handler(struct binder_state *bs,
 		{
 			name[i] = s[i];
 		}
-		name[i] = "\0";
+		name[i] = '\0';
         i = sayhello_to(name);
 		/* 把结果放入reply */
 		bio_put_uint32(reply, i);
@@ -122,7 +126,7 @@ int hello_service_handler(struct binder_state *bs,
 
 
     default:
-        ALOGE("unknown code %d\n", txn->code);
+		fprintf(stderr, "unknown code %d\n", txn->code);
         return -1;
     }
 
@@ -144,7 +148,7 @@ int main(int argc, char **argv)
     }
 	
 	/* add service */
-	svcmgr_publish(bs, svcmgr, "hello", 123);
+	svcmgr_publish(bs, svcmgr, "hello", (void *)123);
 	
 	#if 0
 	while(1)
@@ -152,6 +156,6 @@ int main(int argc, char **argv)
 		
 	}
 	#endif
-	binder_io(bs, hello_service_handler);
+	binder_loop(bs, hello_service_handler);
     return 0;
 }

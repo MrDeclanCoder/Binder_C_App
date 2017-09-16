@@ -4,19 +4,30 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <errno.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/mman.h>
-
+#include <linux/types.h>
+#include <stdbool.h>
 #include "binder.h"
 
 #define MAX_BIO_SIZE (1 << 30)
 
 #define TRACE 0
 
+#if TRACE
+#define ALOGI(x...) fprintf(stderr, "binder: " x)
+#define ALOGE(x...) fprintf(stderr, "binder: " x)
+#else
+#define ALOGI(x...)
+#define ALOGE(x...)
+#endif
+
+
 #define LOG_TAG "Binder"
-#include <cutils/log.h>
+//#include <cutils/log.h>
 
 void bio_init_from_txn(struct binder_io *io, struct binder_transaction_data *txn);
 

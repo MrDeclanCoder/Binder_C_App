@@ -4,7 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-
+#include <linux/types.h>
+#include <private/android_filesystem_config.h>
+#include <stdbool.h>
+#include <string.h>
 #include "binder.h"
 #include "test_server.h"
 
@@ -71,12 +74,12 @@ void sayhello()
 	/* 调用binder_call */
 	if(binder_call(g_bs, &msg, &reply, g_handle, HELLO_SVR_CMD_SAYHELLO))
 	{
-		return 0;
+		return ;
 	}
 	
-	binder_done(g_bs, &msg, &reply);
-	
 	/* 从reply中获取返回值 */
+	
+	binder_done(g_bs, &msg, &reply);
 	
 }
 
@@ -100,7 +103,7 @@ int sayhello_to(char *name)
 	}
 
 	/* 从reply中获取返回值 */
-	ret = bio_get_uint32(reply);
+	ret = bio_get_uint32(&reply);
 		
 	binder_done(g_bs, &msg, &reply);
 	
