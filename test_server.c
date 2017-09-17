@@ -153,6 +153,7 @@ int main(int argc, char **argv)
 	if(ret)
 	{
 		fprintf(stderr, "failed to publish hello service\n");
+		return -1;
 	}
 	
 	
