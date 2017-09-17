@@ -137,6 +137,7 @@ int hello_service_handler(struct binder_state *bs,
 int main(int argc, char **argv)
 {
     int fd;
+	int ret;
     struct binder_state *bs;
     uint32_t svcmgr = BINDER_SERVICE_MANAGER;
     uint32_t handle;
@@ -148,7 +149,12 @@ int main(int argc, char **argv)
     }
 	
 	/* add service */
-	svcmgr_publish(bs, svcmgr, "hello", (void *)123);
+	ret = svcmgr_publish(bs, svcmgr, "hello", (void *)123);
+	if(ret)
+	{
+		fprintf(stderr, "failed to publish hello service\n");
+	}
+	
 	
 	#if 0
 	while(1)
